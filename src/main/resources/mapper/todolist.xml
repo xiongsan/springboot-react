@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fable.demo.bussiness.mapper.TodoListMapper" >
+    <select id="getTodoList" resultType="com.fable.demo.common.pojo.TodoList" parameterType="com.fable.demo.common.pojo.TodoList">
+        SELECT * FROM todolist WHERE 1=1
+        <if test="title !=null and title != ''">
+            AND TITLE=#{title}
+        </if>
+    </select>
+
+    <update id="updateTodoList" parameterType="map">
+        UPDATE todolist
+        <choose>
+            <when test='checked == "1"'>
+                SET checked='0'
+            </when>
+            <otherwise>
+                SET checked='1'
+            </otherwise>
+        </choose>
+        WHERE id=#{id}
+    </update>
+
+    <insert id="insertTodo" parameterType="com.fable.demo.common.pojo.TodoList">
+        INSERT INTO todolist(id,title,checked,sex)
+        VALUES (#{id},#{title},#{checked},#{sex})
+    </insert>
+
+    <delete id="deleteTodo" parameterType="com.fable.demo.common.pojo.TodoList">
+        DELETE FROM todolist WHERE id=#{id}
+    </delete>
+</mapper>

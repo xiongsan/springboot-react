@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fable.demo.bussiness.mapper.fileMapper.IFileMapper" >
+    <select id="getFileList" resultType="hashmap">
+        SELECT * FROM filelist WHERE 1=1
+        <if test="fileName != null and fileName != ''">
+            AND fileName LIKE '%${fileName}%'
+        </if>
+        ORDER BY createTime DESC
+    </select>
+
+
+    <insert id="addFile" parameterType="hashmap">
+       INSERT INTO filelist VALUES (#{id},#{fileName},#{fileUrl},#{createTime})
+    </insert>
+
+    <delete id="deleteFile" parameterType="hashmap">
+        DELETE FROM filelist WHERE fileUrl=#{fileUrl}
+    </delete>
+    <select id="showPic" resultType="hashmap">
+        select * from filelist where fileName regexp 'png|jpg|gif|bmp' ORDER BY createTime DESC ;
+    </select>
+</mapper>

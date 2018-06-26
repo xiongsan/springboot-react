@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.fable.demo.bussiness.mapper.user.UserMapper" >
+    <select id="findRoles" resultType="string">
+        SELECT name FROM role R LEFT JOIN user_role UR ON R.id=UR.roleId
+         LEFT JOIN user_info US ON US.id=UR.userId
+         WHERE US.loginName=#{loginName}
+    </select>
+    <select id="findPermissions" resultType="string">
+          SELECT pageUrl FROM menu M LEFT JOIN role_menu RM ON M.id=RM.menuId
+          LEFT JOIN role R ON R.id=RM.roleId
+          LEFT JOIN user_role UR ON UR.roleId =R.id
+         LEFT JOIN user_info US ON US.id=UR.userId
+         WHERE US.loginName=#{loginName}
+    </select>
+    <select id="findByUsername" resultType="com.fable.demo.common.pojo.User">
+    SELECT * FROM user_info WHERE loginName=#{loginName}
+    </select>
+</mapper>
