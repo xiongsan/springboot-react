@@ -1,14 +1,16 @@
-package com.fable.demo.bussiness.service.login;
+package com.fable.demo.bussiness.controller;
 
 import com.fable.demo.common.pojo.User;
-import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
-import com.fable.enclosure.bussiness.service.impl.BaseServiceImpl;
 import com.fable.enclosure.bussiness.util.ResultKit;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
-import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.io.IOException;
 
 /**
  * <p>
@@ -19,18 +21,20 @@ import org.springframework.stereotype.Service;
  * </p>
  * <p>
  * Author :Hairui
- * Date :2018/6/22
- * Time :16:31
+ * Date :2018/6/28
+ * Time :9:56
  * </p>
  * <p>
  * Department :
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
  */
-@Service
-public class LoginService extends BaseServiceImpl {
-    public BaseResponse toLogin(BaseRequest<User> user) {
-        UsernamePasswordToken token = new UsernamePasswordToken(user.getParam().getLoginName(), user.getParam().getPassword());
+@RestController
+public class LoginController {
+
+    @RequestMapping("/login")
+    public BaseResponse login(@RequestBody User user) throws IOException {
+        UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
@@ -46,7 +50,7 @@ public class LoginService extends BaseServiceImpl {
         } catch (LockedAccountException lae) {
             return ResultKit.fail("account was locked !");
         }
-        subject.getSession().setAttribute("user", user);
         return ResultKit.success();
     }
+
 }

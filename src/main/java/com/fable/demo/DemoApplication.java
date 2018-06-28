@@ -2,9 +2,10 @@ package com.fable.demo;
 
 import com.fable.enclosure.bussiness.util.SpringContextUtil;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.log4j.Logger;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,7 +31,7 @@ import javax.sql.DataSource;
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
 public class DemoApplication {
 
-	private static Logger logger = Logger.getLogger(DemoApplication.class);
+	protected static final Logger logger = LoggerFactory.getLogger(DemoApplication.class);
 
 	//DataSource配置
 	@Bean
@@ -76,5 +77,16 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
+		new Thread(()-> {
+				while (true){
+					try {
+						Thread.sleep(1);
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					logger.error("--------------slf4j.Logger.test----------------");
+				}
+		}).start();
+
 	}
 }

@@ -35,7 +35,6 @@
     <!-- Shiro的Web过滤器 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" />
-        <property name="loginUrl" value="/" />
         <property name="unauthorizedUrl" value="/WEB-INF/jsp/error.jsp" />
         <property name="filterChainDefinitions">
             <value>
@@ -44,7 +43,7 @@
                 /css/**=anon
                 /img/**=anon
                 <!--登录页-->
-                /=anon
+                /baseController/service=authc
                 <!--登陆请求-->
             </value>
         </property>
