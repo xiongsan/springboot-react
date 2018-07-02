@@ -12,9 +12,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.ImportResource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -24,10 +24,9 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 import javax.sql.DataSource;
 
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages = {"com.fable.enclosure.bussiness.controller","com.fable.demo.bussiness"})
 @MapperScan("com.fable.demo.bussiness.mapper")
-@ComponentScan(basePackages = {"com.fable.enclosure.bussiness.controller","com.fable.demo.bussiness.*"})
-@ImportResource(locations= "classpath:spring-shiro-web.xml")
+//@ImportResource(locations= "classpath:spring-shiro-web.xml")
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
 public class DemoApplication {
 
@@ -77,16 +76,16 @@ public class DemoApplication {
 
 	public static void main(String[] args) {
 		SpringApplication.run(DemoApplication.class, args);
-		new Thread(()-> {
-				while (true){
-					try {
-						Thread.sleep(1);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
-					logger.error("--------------slf4j.Logger.test----------------");
-				}
-		}).start();
+//		new Thread(()-> {
+//				while (true){
+//					try {
+//						Thread.sleep(1);
+//					} catch (InterruptedException e) {
+//						e.printStackTrace();
+//					}
+//					logger.error("--------------slf4j.Logger.test----------------");
+//				}
+//		}).start();
 
 	}
 }

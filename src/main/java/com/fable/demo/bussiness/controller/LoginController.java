@@ -6,8 +6,10 @@ import com.fable.enclosure.bussiness.util.ResultKit;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.io.IOException;
@@ -29,10 +31,11 @@ import java.io.IOException;
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
  */
-@RestController
+@Controller
 public class LoginController {
 
     @RequestMapping("/login")
+    @ResponseBody
     public BaseResponse login(@RequestBody User user) throws IOException {
         UsernamePasswordToken token = new UsernamePasswordToken(user.getLoginName(), user.getPassword());
         Subject subject = SecurityUtils.getSubject();
@@ -51,6 +54,13 @@ public class LoginController {
             return ResultKit.fail("account was locked !");
         }
         return ResultKit.success();
+    }
+
+    @RequestMapping("/logout")
+    public String logout(){
+        Subject subject = SecurityUtils.getSubject();
+        subject.logout();
+        return "redirect:/";
     }
 
 }

@@ -1,4 +1,4 @@
-<ehcache updateCheck="false" >
+<ehcache updateCheck="false" name="myEhcacheManager">
 	<!--java.io.tmpdir – 默认临时文件路径  -->
 
     <diskStore path="java.io.tmpdir"/>
