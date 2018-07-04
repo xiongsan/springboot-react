@@ -114,8 +114,10 @@ public class ShiroConfigure {
         shiroFilterFactoryBean.setFilters(filterMap);
 
         Map<String, String> filterChainDefinitionManager = new LinkedHashMap<>();
-        filterChainDefinitionManager.put("/**", "anon");
-        filterChainDefinitionManager.put("/baseController/*", "authc");
+        /*由自定义SessionFilter过滤*/
+//        filterChainDefinitionManager.put("/baseController/noAuth", "anon");
+//        filterChainDefinitionManager.put("/baseController/*", "authc");
+//        filterChainDefinitionManager.put("/**", "anon");
         shiroFilterFactoryBean.setFilterChainDefinitionMap(filterChainDefinitionManager);
 
         shiroFilterFactoryBean.setLoginUrl("/");

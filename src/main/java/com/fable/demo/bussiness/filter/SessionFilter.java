@@ -53,7 +53,7 @@ public class SessionFilter implements Filter {
         //首页和登陆请求无需判断
         boolean bool = SecurityUtils.getSubject().isAuthenticated();
 
-        if (!bool&&uri.contains("baseController")) {
+        if (!bool&&uri.contains("baseController")&&!uri.contains("baseController/noAuth")) {
             if (isAjaxRequest(httpRequest)) {
                 httpResponse.addHeader("sessionstatus", "timeOut");
                 httpResponse.addHeader("loginPath", loginUrl);
