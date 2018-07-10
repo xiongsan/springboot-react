@@ -16,4 +16,7 @@
     <select id="findByUsername" resultType="com.fable.demo.common.pojo.User">
     SELECT * FROM user_info WHERE loginName=#{loginName}
     </select>
+    <insert id="addUser" parameterType="com.fable.demo.common.pojo.User">
+        insert into user_info values(#{id},#{loginName},#{password},#{username},now(),'0',#{salt})
+    </insert>
 </mapper>

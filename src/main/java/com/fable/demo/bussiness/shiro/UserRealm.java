@@ -23,7 +23,7 @@ public class UserRealm extends AuthorizingRealm {
      * 提供用户信息返回权限信息
      */
     @Override
-    protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
+    public AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
         String username = (String) principals.getPrimaryPrincipal();
         SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
         // 根据用户名查询当前用户拥有的角色
@@ -42,7 +42,7 @@ public class UserRealm extends AuthorizingRealm {
      * 提供账户信息返回认证信息
      */
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    public AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
         String username = (String) token.getPrincipal();
         User user = userMapper.findByUsername(username);
         if (user == null) {

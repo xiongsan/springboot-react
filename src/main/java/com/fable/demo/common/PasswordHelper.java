@@ -1,6 +1,7 @@
 package com.fable.demo.common;
 
 import com.fable.demo.common.pojo.User;
+import com.fable.enclosure.bussiness.util.Tool;
 import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
@@ -29,20 +30,15 @@ public class PasswordHelper {
     private static final String algorithmName = "md5";
     private static final int hashIterations = 2;
 
-    public void encryptPassword(User user) {
+    public static User encryptPassword(User user) {
         // User对象包含最基本的字段Username和Password
         user.setSalt(randomNumberGenerator.nextBytes().toHex());
         // 将用户的注册密码经过散列算法替换成一个不可逆的新密码保存进数据，散列过程使用了盐
         String newPassword = new SimpleHash(algorithmName, user.getPassword(),
                 user.getCredentialsSalt(), hashIterations).toHex();
         user.setPassword(newPassword);
+        user.setId(Tool.newGuid());
+        return user;
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        User user = new User();
-        user.setLoginName("wanghr");
-        user.setPassword("000000");
-        new PasswordHelper().encryptPassword(user);
-        System.out.println(user.getPassword()+"               "+user.getSalt());
-    }
 }

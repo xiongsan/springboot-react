@@ -16,20 +16,26 @@ package com.fable.demo.bussiness.websocket;
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
  */
 
+import net.minidev.json.JSONObject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnError;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.CopyOnWriteArraySet;
-
 @ServerEndpoint("/websocket")
 @Component
 public class WebSocketService {
+
+    private static Sender sender=Sender.getSender();
+
+    private Logger logger = LoggerFactory.getLogger(WebSocketService.class);
+
+    private Map<String, String> map = new HashMap<>();
 
     private static CopyOnWriteArraySet<WebSocketService> webSocketSet = new CopyOnWriteArraySet<>();
     //静态变量，用来记录当前在线连接数。应该把它设计成线程安全的。
@@ -41,51 +47,54 @@ public class WebSocketService {
     @OnOpen
     public void onOpen(Session session) {
         this.session = session;
+        sender.getSessions().add(session);
         webSocketSet.add(this);
         addOnlineCount();           //在线数加1
-        System.out.println("有新连接加入！当前在线人数为" + getOnlineCount());
+        logger.info("有新连接加入！当前在线人数为{}", getOnlineCount());
     }
 
     @OnClose
     public void onClose() {
+        sender.getSessions().remove(session);
         webSocketSet.remove(this);
         subOnlineCount();           //在线数减1
-        System.out.println("有一连接关闭！当前在线人数为" + getOnlineCount());
+        logger.info("有一连接关闭！当前在线人数为{}",getOnlineCount());
     }
 
 
     //收到客户端端消息时触发
     @OnMessage
-    public void onMessage(String message, Session session) {
-        System.out.println("来自客户端的消息："+message);
+    public synchronized void  onMessage(String message, Session session) {
+        logger.info("来自客户端的消息：{}",message);
         for(WebSocketService item: webSocketSet){
             try {
-                item.sendMessage(message);
+                map.put("type", "message");
+                map.put("payload", message);
+                item.sendMessage(JSONObject.toJSONString(map));
             } catch (IOException e) {
                 e.printStackTrace();
-                continue;
             }
         }
     }
 
     @OnError
     public void onError(Session session, Throwable error) {
-        System.out.println("发生错误");
+        logger.error("websocket发生错误");
         error.printStackTrace();
     }
-    public void sendMessage(String message) throws IOException{
+    private void sendMessage(String message) throws IOException{
         this.session.getBasicRemote().sendText(message);
     }
 
-    public static synchronized int getOnlineCount() {
+    private static synchronized int getOnlineCount() {
         return onlineCount;
     }
 
-    public static synchronized void addOnlineCount() {
+    private static synchronized void addOnlineCount() {
         WebSocketService.onlineCount++;
     }
 
-    public static synchronized void subOnlineCount() {
+    private static synchronized void subOnlineCount() {
         WebSocketService.onlineCount--;
     }
 

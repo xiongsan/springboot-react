@@ -27,4 +27,5 @@ public interface UserMapper {
     Set<String> findRoles(@Param("loginName") String loginName);
     Set<String> findPermissions(@Param("loginName") String loginName);
     User findByUsername(@Param("loginName") String loginName);
+    void addUser(User user);
 }

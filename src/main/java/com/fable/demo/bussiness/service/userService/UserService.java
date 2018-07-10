@@ -1,5 +1,8 @@
 package com.fable.demo.bussiness.service.userService;
 
+import com.fable.demo.bussiness.mapper.user.UserMapper;
+import com.fable.demo.bussiness.shiro.UserRealm;
+import com.fable.demo.common.PasswordHelper;
 import com.fable.demo.common.pojo.User;
 import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
@@ -7,7 +10,11 @@ import com.fable.enclosure.bussiness.service.impl.BaseServiceImpl;
 import com.fable.enclosure.bussiness.util.ResultKit;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
+import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.subject.Subject;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,7 +37,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService extends BaseServiceImpl {
 
-    public BaseResponse login(BaseRequest<User> request){
+    @Autowired
+    UserMapper userMapper;
+
+    @Autowired
+    UserRealm userRealm;
+
+    private Logger logger =  LoggerFactory.getLogger(UserService.class);
+
+    public BaseResponse login(BaseRequest<User> request) {
         UsernamePasswordToken token = new UsernamePasswordToken(request.getParam().getLoginName(), request.getParam().getPassword());
         Subject subject = SecurityUtils.getSubject();
         try {
@@ -50,13 +65,27 @@ public class UserService extends BaseServiceImpl {
         return ResultKit.success();
     }
 
-    public BaseResponse logout(){
+    public BaseResponse logout() {
         SecurityUtils.getSubject().logout();
         return ResultKit.success();
     }
 
-    public BaseResponse register(BaseRequest<User> request){
-        // TODO: 2018/7/4
+    public BaseResponse register(BaseRequest<User> request) {
+        User user = PasswordHelper.encryptPassword(request.getParam());
+        userMapper.addUser(user);
         return ResultKit.success();
     }
+
+    public BaseResponse checkUniqueUser(BaseRequest<User> request) {
+        User user = userMapper.findByUsername(request.getParam().getLoginName());
+        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+        logger.error(""+ info.getRoles());
+        logger.error(""+info.getStringPermissions());
+
+        if (user != null)
+            return ResultKit.success();
+        // TODO: 2018/7/4
+        return ResultKit.fail();
+    }
+
 }

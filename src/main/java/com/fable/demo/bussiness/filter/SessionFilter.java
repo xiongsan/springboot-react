@@ -1,6 +1,5 @@
 package com.fable.demo.bussiness.filter;
 
-import com.fable.demo.DemoApplication;
 import org.apache.shiro.SecurityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +10,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * <p>
@@ -49,11 +46,10 @@ public class SessionFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) response;
 // 登陆url
         String uri = httpRequest.getRequestURI();
-        String path = uri.substring(uri.lastIndexOf("/"));
         //首页和登陆请求无需判断
-        boolean bool = SecurityUtils.getSubject().isAuthenticated();
+        boolean isAuthenticated = SecurityUtils.getSubject().isAuthenticated();
 
-        if (!bool&&uri.contains("baseController")&&!uri.contains("baseController/noAuth")) {
+        if (!isAuthenticated&&uri.contains("baseController")&&!uri.contains("baseController/noAuth")) {
             if (isAjaxRequest(httpRequest)) {
                 httpResponse.addHeader("sessionstatus", "timeOut");
                 httpResponse.addHeader("loginPath", loginUrl);
