@@ -78,9 +78,10 @@ public class UserService extends BaseServiceImpl {
 
     public BaseResponse checkUniqueUser(BaseRequest<User> request) {
         User user = userMapper.findByUsername(request.getParam().getLoginName());
-        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
-        logger.error(""+ info.getRoles());
-        logger.error(""+info.getStringPermissions());
+        //查看权限
+//        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
+//        logger.error(""+ info.getRoles());
+//        logger.error(""+info.getStringPermissions());
 
         if (user != null)
             return ResultKit.success();
