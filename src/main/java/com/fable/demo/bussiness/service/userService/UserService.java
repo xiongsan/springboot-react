@@ -8,6 +8,7 @@ import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
 import com.fable.enclosure.bussiness.service.impl.BaseServiceImpl;
 import com.fable.enclosure.bussiness.util.ResultKit;
+import com.fable.enclosure.bussiness.util.Tool;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
@@ -82,7 +83,7 @@ public class UserService extends BaseServiceImpl {
 //        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 //        logger.error(""+ info.getRoles());
 //        logger.error(""+info.getStringPermissions());
-
+        Tool.startTransaction();
         if (user != null)
             return ResultKit.success();
         // TODO: 2018/7/4

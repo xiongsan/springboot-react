@@ -4,6 +4,7 @@ import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 import java.util.Map;
 
 /**
@@ -34,5 +35,9 @@ public interface IFileService {
     BaseResponse addFile(BaseRequest<Map<String, Object>> param);
 
     BaseResponse showPic();
+
+    BaseResponse solrService(BaseRequest<Map<String, String>> param);
+
+    BaseResponse search(BaseRequest<Map<String, String>> param) throws IOException;
 
 }

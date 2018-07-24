@@ -13,6 +13,7 @@ import com.github.pagehelper.PageHelper;
 import net.sf.ehcache.CacheManager;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class TodoListServiceIml extends BaseServiceImpl implements ITodoListServ
 
     @Override
     @SuppressWarnings("unchecked")
+    @Transactional
     public BaseResponse todoList(BaseRequest<TodoList> request) {
 //        Cache cache=cacheManager.getCache("test");
 //        if(cache.get("todolist")!=null){

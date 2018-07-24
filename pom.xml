@@ -129,6 +129,30 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-redis</artifactId>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/org.springframework.kafka/spring-kafka -->
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+			<version>2.1.7.RELEASE</version>
+		</dependency>
+		<!--二维码-->
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>core</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+		<dependency>
+			<groupId>com.google.zxing</groupId>
+			<artifactId>javase</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+
+		<!--spring boot项目引入的solr的依赖-->
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-solr</artifactId>
+		</dependency>
+
 	</dependencies>
 
 	<build>

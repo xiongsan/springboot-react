@@ -55,7 +55,7 @@ public class Receiver {
             map.put("payload", message);
             sender.sendData(JSONObject.toJSONString(map));
         }
-        LOGGER.info("Received <" + message + ">");
+        LOGGER.info("Redis received message from kafka<" + message + ">");
         latch.countDown();
     }
 }
