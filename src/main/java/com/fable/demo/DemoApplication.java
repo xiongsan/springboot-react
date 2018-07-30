@@ -75,7 +75,7 @@ public class DemoApplication {
 		service.execute(()-> {
 				while (true) {
 					try {
-						Thread.sleep(50);
+						Thread.sleep(1000);
 						String fileName = strings[random.nextInt(strings.length)];
 						String fileUrl = bools[random.nextInt(bools.length)];
 						fileService.addFileCrazy(fileName,fileUrl);

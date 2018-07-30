@@ -16,6 +16,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import org.apache.solr.client.solrj.SolrClient;
 import org.apache.solr.client.solrj.SolrQuery;
+import org.apache.solr.client.solrj.impl.HttpSolrClient;
 import org.apache.solr.client.solrj.response.QueryResponse;
 import org.apache.solr.common.SolrDocumentList;
 import org.slf4j.Logger;
@@ -163,6 +164,7 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
         /**
          test_core是solr的一个core名称
          */
+//        HttpSolrClient solrClient=new HttpSolrClient.Builder("http://192.168.20.11:9090/solr/").build();
         SolrQuery query = new SolrQuery();
         query.setSort("createTime", SolrQuery.ORDER.asc); //设置排序参数及排序规则
         query.setStart((param.getPageNo() - 1) * param.getPageSize());//起始页，这里一定要注意，不能直接把pageNo赋值给start,start表示从第一个数据开始，第一条从0开始。
@@ -170,15 +172,20 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
         StringBuilder buffer = new StringBuilder();
         Map<String, String> params = param.getParam();
         Iterator<String> it=params.keySet().iterator();
+        //多个条件需要拼接成类似：     fileName:*1.txt* and fileUrl:*https://*
         while (it.hasNext()){
             String key = it.next();
-            buffer.append(key + ":*" + params.get(key) + "*");//如果你的fbfmc字段在solrHome/fbf/conf/manage-schema文件中定义的类型是text_ik，即已经分词了，那么这里可以这么写,如果你定义的是string类型，即没有分词，那这句话的append中的内容需要写成这样buffer.append("fbfmc:*"+fbfmc+"*"),这是solr的查询规则，没有分词最好是加上模糊查询符号"*"
+            buffer.append(key + ":*" + params.get(key) + "* and ");//如果你的fbfmc字段在solrHome/fbf/conf/manage-schema文件中定义的类型是text_ik，即已经分词了，那么这里可以这么写,如果你定义的是string类型，即没有分词，那这句话的append中的内容需要写成这样buffer.append("fbfmc:*"+fbfmc+"*"),这是solr的查询规则，没有分词最好是加上模糊查询符号"*"
+        }
+        String bufferStr = buffer.toString();
+        if(bufferStr.endsWith(" and ")){
+            bufferStr = bufferStr.substring(0,bufferStr.lastIndexOf(" and "));
         }
         if(params.isEmpty()){
             query.set("q", "*:*"); //没有传入参数则全部查询
         }
         else{
-            query.set("q", buffer.toString());
+            query.set("q", bufferStr);
         }
         QueryResponse rsp;
         List<FileList> fbfList = new ArrayList<>();
