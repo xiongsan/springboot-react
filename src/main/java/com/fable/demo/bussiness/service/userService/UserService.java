@@ -46,8 +46,8 @@ public class UserService extends BaseServiceImpl {
 
     private Logger logger =  LoggerFactory.getLogger(UserService.class);
 
-    public BaseResponse login(BaseRequest<User> request) {
-        UsernamePasswordToken token = new UsernamePasswordToken(request.getParam().getLoginName(), request.getParam().getPassword());
+    public BaseResponse login(User request) {
+        UsernamePasswordToken token = new UsernamePasswordToken(request.getLoginName(), request.getPassword());
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(token);
@@ -71,19 +71,18 @@ public class UserService extends BaseServiceImpl {
         return ResultKit.success();
     }
 
-    public BaseResponse register(BaseRequest<User> request) {
-        User user = PasswordHelper.encryptPassword(request.getParam());
+    public BaseResponse register(User request) {
+        User user = PasswordHelper.encryptPassword(request);
         userMapper.addUser(user);
         return ResultKit.success();
     }
 
-    public BaseResponse checkUniqueUser(BaseRequest<User> request) {
-        User user = userMapper.findByUsername(request.getParam().getLoginName());
+    public BaseResponse checkUniqueUser(User request) {
+        User user = userMapper.findByUsername(request.getLoginName());
         //查看权限
 //        AuthorizationInfo info = userRealm.doGetAuthorizationInfo(SecurityUtils.getSubject().getPrincipals());
 //        logger.error(""+ info.getRoles());
 //        logger.error(""+info.getStringPermissions());
-        Tool.startTransaction();
         if (user != null)
             return ResultKit.success();
         // TODO: 2018/7/4

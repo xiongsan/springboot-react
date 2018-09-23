@@ -3,7 +3,7 @@ package com.fable.demo.bussiness.service.todoService;
 
 import com.fable.demo.bussiness.mapper.TodoListMapper;
 import com.fable.demo.common.pojo.TodoList;
-import com.fable.enclosure.bussiness.interfaces.BaseRequest;
+import com.fable.enclosure.bussiness.entity.PageRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
 import com.fable.enclosure.bussiness.service.impl.BaseServiceImpl;
 import com.fable.enclosure.bussiness.util.ResultKit;
@@ -32,27 +32,26 @@ public class TodoListServiceIml extends BaseServiceImpl implements ITodoListServ
     @Override
     @SuppressWarnings("unchecked")
     @Transactional
-    public BaseResponse todoList(BaseRequest<TodoList> request) {
+    public BaseResponse todoList(TodoList request) {
 //        Cache cache=cacheManager.getCache("test");
 //        if(cache.get("todolist")!=null){
 //            return ResultKit.serviceResponse((List<TodoList>) cache.get("todolist").getValue());
 //        }
-        List<TodoList> list = mapper.getTodoList(request.getParam());
+        List<TodoList> list = mapper.getTodoList(request);
 //        Element element = new Element("todolist",list);
 //        cache.put(element);
         return ResultKit.serviceResponse(list);
     }
 
     @Override
-    public BaseResponse modifyTodoList(BaseRequest<TodoList> request) {
-         mapper.updateTodoList(request.getParam());
+    public BaseResponse modifyTodoList(TodoList request) {
+         mapper.updateTodoList(request);
         return ResultKit.success();
     }
 
-    public BaseResponse addTodo(BaseRequest<TodoList> request) {
+    public BaseResponse addTodo(TodoList todo) {
         Tool.startTransaction();
         try{
-            TodoList todo = request.getParam();
             todo.setId(Tool.newGuid());
             todo.setChecked("1");
             todo.setSex("男");
@@ -67,12 +66,12 @@ public class TodoListServiceIml extends BaseServiceImpl implements ITodoListServ
     }
 
     @Override
-    public BaseResponse cancelTodo(BaseRequest<TodoList> request) {
-        mapper.deleteTodo(request.getParam());
+    public BaseResponse cancelTodo(TodoList request) {
+        mapper.deleteTodo(request);
         return ResultKit.success();
     }
 
-    public BaseResponse getPageData(BaseRequest<TodoList> param){
+    public BaseResponse getPageData(PageRequest<TodoList> param){
         Page<TodoList> result = PageHelper.startPage(param.getPageNo(),param.getPageSize());
         mapper.getTodoList(param.getParam());
         return ResultKit.wrap(result);

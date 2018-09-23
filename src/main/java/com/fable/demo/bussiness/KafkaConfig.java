@@ -35,8 +35,8 @@ import java.util.concurrent.CountDownLatch;
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
  */
-@Configuration
-@EnableKafka
+//@Configuration
+//@EnableKafka
 public class KafkaConfig {
 
     @Value("${spring.kafka.bootstrap-servers}")

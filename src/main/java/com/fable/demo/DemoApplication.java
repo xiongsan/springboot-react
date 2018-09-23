@@ -52,7 +52,7 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(DemoApplication.class, args);
 		FileServiceImpl fileService = ctx.getBean(FileServiceImpl.class);
-		KafkaTemplate<String,String> kafkaTemplate = ctx.getBean(KafkaTemplate.class);
+//		KafkaTemplate<String,String> kafkaTemplate = ctx.getBean(KafkaTemplate.class);
 		String bools[] = new String[]{",true",",false"};
 		String[] strings = new String[]{
 				"topicId,metadata,endPublish",
@@ -75,11 +75,11 @@ public class DemoApplication {
 		service.execute(()-> {
 				while (true) {
 					try {
-						Thread.sleep(1000);
+						Thread.sleep(10000);
 						String fileName = strings[random.nextInt(strings.length)];
 						String fileUrl = bools[random.nextInt(bools.length)];
-						fileService.addFileCrazy(fileName,fileUrl);
-			        	kafkaTemplate.send("test", "kafka key",fileName + fileUrl);
+//						fileService.addFileCrazy(fileName,fileUrl);
+//			        	kafkaTemplate.send("test", "kafka key",fileName + fileUrl);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}

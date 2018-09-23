@@ -11,7 +11,7 @@
 
 
     <insert id="addFile" parameterType="hashmap">
-       INSERT INTO filelist(id,fileName,fileUrl)  VALUES(#{id},#{fileName},#{fileUrl})
+       INSERT INTO filelist(id,fileName,fileUrl,createTime)  VALUES(#{id},#{fileName},#{fileUrl},#{createTime})
     </insert>
 
     <delete id="deleteFile" parameterType="hashmap">

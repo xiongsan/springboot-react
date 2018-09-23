@@ -68,8 +68,8 @@
 
 		<dependency>
 			<groupId>com.fable.enclosure</groupId>
-			<artifactId>ssc-react</artifactId>
-			<version>1.0</version>
+			<artifactId>ssc</artifactId>
+			<version>2.6</version>
 		</dependency>
 
 		<dependency>

@@ -3,6 +3,7 @@ package com.fable.demo.bussiness.service.fileService;
 import com.fable.demo.bussiness.mapper.fileMapper.IFileMapper;
 import com.fable.demo.common.pojo.FileList;
 import com.fable.enclosure.bussiness.entity.DataTableResponse;
+import com.fable.enclosure.bussiness.entity.PageRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
 import com.fable.enclosure.bussiness.service.impl.BaseServiceImpl;
@@ -29,6 +30,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +60,7 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
 
     final private String ideaContainer = File.separator + "target";
     final private String normalContainer = File.separator + "webapps";
+    private String fileFolder;
 
 
     @Autowired
@@ -79,18 +82,21 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
     @Override
 
     public String getFileFolder(HttpServletRequest request) {
-        String uploadPath = request.getServletContext().getRealPath(
-                File.separator);
-        if (uploadPath.contains(normalContainer)) {
-            uploadPath = uploadPath.substring(0, uploadPath.indexOf(normalContainer));
-            uploadPath = uploadPath.substring(0, uploadPath.lastIndexOf(File.separator));
-        } else if (uploadPath.contains(ideaContainer)) {
-            uploadPath = uploadPath.substring(0, uploadPath.indexOf(ideaContainer));
-            uploadPath = uploadPath.substring(0, uploadPath.lastIndexOf(File.separator));
-        } else {
-            uploadPath = System.getProperty("user.dir");
+        if(StringUtils.isEmpty(fileFolder)){
+            String uploadPath = request.getServletContext().getRealPath(
+                    File.separator);
+            if (uploadPath.contains(normalContainer)) {
+                uploadPath = uploadPath.substring(0, uploadPath.indexOf(normalContainer));
+                uploadPath = uploadPath.substring(0, uploadPath.lastIndexOf(File.separator));
+            } else if (uploadPath.contains(ideaContainer)) {
+                uploadPath = uploadPath.substring(0, uploadPath.indexOf(ideaContainer));
+                uploadPath = uploadPath.substring(0, uploadPath.lastIndexOf(File.separator));
+            } else {
+                uploadPath = System.getProperty("user.dir");
+            }
+            fileFolder = uploadPath;
         }
-        return uploadPath + File.separator + "uploadFile";
+        return fileFolder + File.separator + "uploadFile";
     }
 
     /**
@@ -100,11 +106,11 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
      * @return
      */
     @Override
-    public BaseResponse deleteFile(BaseRequest<Map<String, String>> param) {
-        File file = new File(getFileFolder(param.getRequest()), param.getParam().get("fileUrl"));
+    public BaseResponse deleteFile(Map<String, String> param) {
+        File file = new File(fileFolder, param.get("fileUrl"));
         if (file.exists()) {
             if (file.delete()) {
-                mapper.deleteFile(param.getParam());
+                mapper.deleteFile(param);
                 return ResultKit.success();
             }
             return ResultKit.fail("删除文件失败");
@@ -114,18 +120,17 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
     }
 
     @Override
-    public BaseResponse getFileList(BaseRequest<Map<String, String>> param) {
+    public BaseResponse getFileList(PageRequest<Map<String, String>> param) {
         Page<Map<String, Object>> result = PageHelper.startPage(param.getPageNo(), param.getPageSize());
         mapper.getFileList(param.getParam());
         return ResultKit.wrap(result);
     }
 
     @Override
-    public BaseResponse addFile(BaseRequest<Map<String, Object>> param) {
-        Map<String, Object> params = param.getParam();
-        params.put("id", Tool.newGuid());
-        params.put("createTime", new Date());
-        return ResultKit.serviceResponse(mapper.addFile(param.getParam()));
+    public BaseResponse addFile(Map<String, Object> param) {
+        param.put("id", Tool.newGuid());
+        param.put("createTime", new Date());
+        return ResultKit.serviceResponse(mapper.addFile(param));
     }
 
     private  Map<String, Object> params = new HashMap<>();
@@ -160,7 +165,7 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
      *
      *         solrQuery.setQuery(params.toString());
      */
-    public BaseResponse solrService(BaseRequest<Map<String, String>> param) {
+    public BaseResponse solrService(PageRequest<Map<String, String>> param) {
         /**
          test_core是solr的一个core名称
          */
@@ -207,7 +212,7 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
     }
 
     @Override
-    public BaseResponse search(BaseRequest<Map<String, String>> param) throws IOException {
+    public BaseResponse search(PageRequest<Map<String, String>> param) throws IOException {
         String condition;
         if(param.getParam().isEmpty()){
             condition="q=*:*"; //没有传入参数则全部查询
@@ -233,7 +238,7 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
         return response;
     }
 
-    @Scheduled(cron = "0/5 * * * * *")
+//    @Scheduled(cron = "0/5 * * * * *")
     public void updateSolr(){
         MultiValueMap<String, Object> postParameters = new LinkedMultiValueMap<>();
         postParameters.add("command", "delta-import");

@@ -1,5 +1,6 @@
 package com.fable.demo.bussiness.service.fileService;
 
+import com.fable.enclosure.bussiness.entity.PageRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
 
@@ -28,16 +29,16 @@ public interface IFileService {
 
     String getFileFolder(HttpServletRequest request);
 
-    BaseResponse deleteFile(BaseRequest<Map<String, String>> param);
+    BaseResponse deleteFile(Map<String, String> param);
 
-    BaseResponse getFileList(BaseRequest<Map<String, String>> param);
+    BaseResponse getFileList(PageRequest<Map<String, String>> param);
 
-    BaseResponse addFile(BaseRequest<Map<String, Object>> param);
+    BaseResponse addFile(Map<String, Object> param);
 
     BaseResponse showPic();
 
-    BaseResponse solrService(BaseRequest<Map<String, String>> param);
+    BaseResponse solrService(PageRequest<Map<String, String>> param);
 
-    BaseResponse search(BaseRequest<Map<String, String>> param) throws IOException;
+    BaseResponse search(PageRequest<Map<String, String>> param) throws IOException;
 
 }
