@@ -31,7 +31,7 @@ public class TodoListServiceIml extends BaseServiceImpl implements ITodoListServ
 
     @Override
     @SuppressWarnings("unchecked")
-    @Transactional
+
     public BaseResponse todoList(TodoList request) {
 //        Cache cache=cacheManager.getCache("test");
 //        if(cache.get("todolist")!=null){
@@ -49,20 +49,17 @@ public class TodoListServiceIml extends BaseServiceImpl implements ITodoListServ
         return ResultKit.success();
     }
 
+    @Transactional
     public BaseResponse addTodo(TodoList todo) {
-        Tool.startTransaction();
-        try{
             todo.setId(Tool.newGuid());
             todo.setChecked("1");
             todo.setSex("男");
             mapper.insertTodo(todo);
-            Tool.endTransaction();
+            todo.setId(Tool.newGuid());
+            todo.setChecked("1");
+            todo.setSex("女");
+            mapper.insertTodo(todo);
             return ResultKit.success();
-        }catch(Exception e){
-            Tool.rollBack();
-            e.printStackTrace();
-            return ResultKit.fail(e.getMessage());
-        }
     }
 
     @Override
