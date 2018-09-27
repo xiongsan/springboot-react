@@ -94,9 +94,9 @@ public class FileServiceImpl extends BaseServiceImpl implements IFileService {
             } else {
                 uploadPath = System.getProperty("user.dir");
             }
-            fileFolder = uploadPath;
+            fileFolder=uploadPath+ File.separator + "uploadFile";
         }
-        return fileFolder + File.separator + "uploadFile";
+        return fileFolder;
     }
 
     /**
