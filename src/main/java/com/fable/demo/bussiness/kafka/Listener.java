@@ -1,4 +1,4 @@
-package com.fable.demo.bussiness;
+package com.fable.demo.bussiness.kafka;
 
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.slf4j.Logger;
@@ -24,6 +24,10 @@ import java.util.concurrent.CountDownLatch;
  * Department :
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
+ */
+
+/**
+ * kafka的listener
  */
 public class Listener {
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
