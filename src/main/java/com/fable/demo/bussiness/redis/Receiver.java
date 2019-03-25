@@ -17,15 +17,15 @@ package com.fable.demo.bussiness.redis;
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
  */
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.CountDownLatch;
 
 import com.fable.demo.bussiness.websocket.Sender;
 import net.minidev.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.CountDownLatch;
 
 /**
  * redis的listener
@@ -40,7 +40,6 @@ public class Receiver {
 
     private Sender sender = Sender.getSender();
 
-    @Autowired
     public Receiver(CountDownLatch latch) {
         this.latch = latch;
     }
@@ -58,7 +57,7 @@ public class Receiver {
             map.put("payload", message);
             sender.sendData(JSONObject.toJSONString(map));
         }
-        LOGGER.info("Redis received message from kafka<" + message + ">");
+//        LOGGER.info("Redis received message from kafka<" + message + ">");
         latch.countDown();
     }
 }

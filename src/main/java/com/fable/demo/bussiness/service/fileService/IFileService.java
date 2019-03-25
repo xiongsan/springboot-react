@@ -1,7 +1,6 @@
 package com.fable.demo.bussiness.service.fileService;
 
 import com.fable.enclosure.bussiness.entity.PageRequest;
-import com.fable.enclosure.bussiness.interfaces.BaseRequest;
 import com.fable.enclosure.bussiness.interfaces.BaseResponse;
 
 import javax.servlet.http.HttpServletRequest;

@@ -1,6 +1,7 @@
 package com.fable.demo.bussiness.redis;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -26,7 +27,7 @@ import java.util.concurrent.CountDownLatch;
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
  */
-//@Configuration
+@Configuration
 public class RedisConfig {
     @Bean
     RedisMessageListenerContainer container(RedisConnectionFactory connectionFactory,

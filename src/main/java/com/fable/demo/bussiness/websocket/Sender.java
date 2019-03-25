@@ -1,7 +1,5 @@
 package com.fable.demo.bussiness.websocket;
 
-import org.springframework.stereotype.Component;
-
 import javax.websocket.Session;
 import java.io.IOException;
 import java.util.concurrent.CopyOnWriteArraySet;

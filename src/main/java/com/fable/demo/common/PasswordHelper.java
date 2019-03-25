@@ -6,8 +6,6 @@ import org.apache.shiro.crypto.RandomNumberGenerator;
 import org.apache.shiro.crypto.SecureRandomNumberGenerator;
 import org.apache.shiro.crypto.hash.SimpleHash;
 
-import java.io.UnsupportedEncodingException;
-
 /**
  * <p>
  * Title :

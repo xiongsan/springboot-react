@@ -3,7 +3,6 @@ package com.fable.demo.bussiness.mapper;
 import com.fable.demo.common.pojo.TodoList;
 
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by Wanghairui on 2017/5/22.

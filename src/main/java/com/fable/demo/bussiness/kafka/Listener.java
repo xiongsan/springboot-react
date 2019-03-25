@@ -24,6 +24,7 @@ import java.util.concurrent.CountDownLatch;
  * Department :
  * </p>
  * <p> Copyright : 江苏飞博软件股份有限公司 </p>
+ *
  */
 
 /**
@@ -40,7 +41,7 @@ public class Listener {
     }
     @KafkaListener(topics = {"test"})
     public void listen(ConsumerRecord<?, ?> record) throws InterruptedException {
-       logger.info("kafka的key: " + record.key()+",kafka的value: " + record.value().toString());
+//       logger.info("kafka的key: " + record.key()+",kafka的value: " + record.value().toString());
         template.convertAndSend("testRedis",record.value());
         countDownLatch.await();
     }
