@@ -31,10 +31,13 @@ import java.util.concurrent.CountDownLatch;
  * kafka的listener
  */
 public class Listener {
+
     protected final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     private StringRedisTemplate template;
+
     private CountDownLatch countDownLatch;
+
     public Listener(StringRedisTemplate template, CountDownLatch countDownLatch){
         this.template = template;
         this.countDownLatch = countDownLatch;
