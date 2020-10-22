@@ -39,6 +39,7 @@ public class DemoApplication {
 
     @Bean
     public RestTemplate restTemplate(){
+		//同一个文件
 		return new RestTemplate();
 	}
 
