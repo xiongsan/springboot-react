@@ -35,7 +35,6 @@ public class PasswordHelper {
         String newPassword = new SimpleHash(algorithmName, user.getPassword(),
                 user.getCredentialsSalt(), hashIterations).toHex();
         user.setPassword(newPassword);
-        //哈哈哈哈-------
         user.setId(Tool.newGuid());
         return user;
     }
