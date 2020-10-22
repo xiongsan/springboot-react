@@ -46,8 +46,6 @@ public class DemoApplication {
     @SuppressWarnings("unchecked")
 	public static void main(String[] args) {
 		ApplicationContext ctx = SpringApplication.run(DemoApplication.class, args);
-		//我操，我要看看这是啥i情况
-		//123456789
 	}
 
 
